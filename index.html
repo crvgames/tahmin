@@ -1,0 +1,204 @@
+ <!DOCTYPE html>
+<html lang="tr">
+<head>
+<link rel="icon" href="favicon0.png" type="image/png">
+<meta name="google-site-verification" content="kLCS6z8Lb3jZLTBq6-TJDJSFEFtRTSW3B3IMBYlx5wo" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRV GAMES - Sayı Tahmin Oyunu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url('d.jpeg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .game-container {
+            background: rgba(30, 41, 59, 0.85);
+            border: 3px solid #f97316;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #fb923c;
+            margin-top: 0;
+            font-size: 28px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .brand {
+            font-size: 22px; /* Yazıyı büyüttük ve dikkat çekici hale getirdik */
+            font-weight: bold;
+            color: #f97316;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(249, 115, 22, 0.3);
+        }
+
+        p {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 80%;
+            padding: 12px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #475569;
+            background: #0f172a;
+            color: #fff;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #f97316;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: 0.2s;
+            color: white;
+        }
+
+        .btn-tahmin {
+            background: linear-gradient(45deg, #ea580c, #f97316);
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+        }
+
+        .btn-tahmin:hover {
+            transform: scale(1.03);
+            background: linear-gradient(45deg, #c2410c, #ea580c);
+        }
+
+        .btn-fullscreen {
+            background: #475569;
+        }
+
+        .btn-fullscreen:hover {
+            background: #64748b;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .stats {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="brand">CRV GAMES</div>
+        <h1>Sayı Tahmin Oyunu</h1>
+        <p>1 ile 100 arasında bir sayı tuttum. Bakalım bulabilecek misin?</p>
+
+        <input type="number" id="userGuess" placeholder="Tahmininiz" min="1" max="100" autofocus>
+        
+        <div class="btn-group">
+            <button class="btn-tahmin" onclick="checkGuess()">Tahmin Et</button>
+            <button class="btn-fullscreen" onclick="toggleFullScreen()" title="Tam Ekran">⛶</button>
+        </div>
+
+        <div id="message"></div>
+        <div class="stats">Deneme Sayısı: <span id="attempts">0</span></div>
+    </div>
+
+    <script>
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+        let attemptsCount = 0;
+
+        const guessInput = document.getElementById("userGuess");
+        const messageDiv = document.getElementById("message");
+        const attemptsSpan = document.getElementById("attempts");
+
+        guessInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkGuess();
+            }
+        });
+
+        function checkGuess() {
+            let userVal = parseInt(guessInput.value);
+
+            if (isNaN(userVal) || userVal < 1 || userVal > 100) {
+                messageDiv.style.color = "#f87171";
+                messageDiv.innerText = "Lütfen 1 ile 100 arasında geçerli bir sayı girin!";
+                return;
+            }
+
+            attemptsCount++;
+            attemptsSpan.innerText = attemptsCount;
+
+            if (userVal < targetNumber) {
+                messageDiv.style.color = "#38bdf8";
+                messageDiv.innerText = "📈 Çok küçük! Daha büyük bir sayı söyle.";
+            } else if (userVal > targetNumber) {
+                messageDiv.style.color = "#fb923c";
+                messageDiv.innerText = "📉 Çok büyük! Daha küçük bir sayı söyle.";
+            } else {
+                messageDiv.style.color = "#4ade80";
+                messageDiv.innerText = `🎉 Tebrikler! ${attemptsCount} denemede buldun!`;
+                guessInput.disabled = true;
+            }
+
+            guessInput.value = "";
+            guessInput.focus();
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Tam ekran modu açılamadı: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
